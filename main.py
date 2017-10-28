@@ -17,7 +17,7 @@ def main():
     elif (cli_args.whatismyip):
         print (whatismyip.whatismyip())
     elif (cli_args.NS):
-        print ("print NS")
+        print (dnschecker.ns(cli_args.NS))
     elif (cli_args.A):
         print ("print A")
     else:
