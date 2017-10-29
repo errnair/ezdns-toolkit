@@ -49,3 +49,15 @@ def a(url):
     for rdata in aAnswers:
         aRecords.append(str(rdata))
     return(aRecords)
+
+def txt(url):
+    txtservers = []
+
+    domain_parts = tldextract.extract(url)
+    domain = domain_parts.registered_domain
+
+    txtResolver = dns.resolver.Resolver()
+    txtAnswers = txtResolver.query(domain, "TXT")
+    for rdata in txtAnswers:
+        txtservers.append(str(rdata))
+    return(txtservers)
