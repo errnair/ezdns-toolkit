@@ -10,16 +10,20 @@ def main():
     cli_argparser.add_argument('-i', '--myip', nargs='?', const=1, help="Get your WAN IP", required=False)
     cli_argparser.add_argument('-ns', '--NS', help="Get a domain's NS records.", required=False)
     cli_argparser.add_argument('-a', '--A', help="Get a domain's A record.", required=False)
+    cli_argparser.add_argument('-mx', '--MX', help="Get a domain's MX record.", required=False)
     cli_args = cli_argparser.parse_args()
 
     if (cli_args.NS and cli_args.A):
-        print ("print A and NS")
+        print (dnschecker.ns(cli_args.NS))
+        print (dnschecker.a(cli_args.A))
     elif (cli_args.myip):
         print (whatismyip.whatismyip())
     elif (cli_args.NS):
         print (dnschecker.ns(cli_args.NS))
     elif (cli_args.A):
         print (dnschecker.a(cli_args.A))
+    elif (cli_args.MX):
+        print (dnschecker.mx(cli_args.MX))
     else:
         print ("Default")
 
