@@ -15,24 +15,47 @@ def main():
     cli_argparser.add_argument('-l', '--list', help="Get all the DNS record(s) of a domain.", required=False)
     cli_args = cli_argparser.parse_args()
 
-    if (cli_args.NS and cli_args.A):
-        print (dnschecker.ns(cli_args.NS))
-        print (dnschecker.a(cli_args.A))
+    if (cli_args.NS):
+        ns_dict = dnschecker.ns(cli_args.NS)
+        print ("\nNameservers\n===========")
+        for key in ns_dict:
+            print ("  > " + key)
+            for item in (ns_dict[key]):
+                print ("\t" + item)
+        print ("\n")
+    elif (cli_args.A):
+        print ("\nA Record(s)\n===========")
+        for item in dnschecker.a(cli_args.A):
+            print ("  > " + item)
+        print ("\n")
+    elif (cli_args.MX):
+        print ("\nMX Record(s)\n============")
+        for item in dnschecker.mx(cli_args.MX):
+            print ("  > " + item)
+        print ("\n")
+    elif (cli_args.TXT):
+        print ("\nTXT Record(s)\n=============")
+        for item in dnschecker.txt(cli_args.TXT):
+            print ("  > " + item)
+        print ("\n")
+    elif (cli_args.list):
+        ns_dict = dnschecker.ns(cli_args.list)
+        print ("\n>> Nameservers\n   ===========")
+        for key in ns_dict:
+            print ("  > " + key)
+            for item in (ns_dict[key]):
+                print ("\t" + item)
+        print ("\n>> A Record(s)\n   ===========")
+        for item in dnschecker.a(cli_args.list):
+            print ("  > " + item)
+        print ("\n>> MX Record(s)\n   ============")
+        for item in dnschecker.mx(cli_args.list):
+            print ("  > " + item)
+        print ("\n>> TXT Record(s)\n   =============")
+        for item in dnschecker.txt(cli_args.list):
+            print ("  > " + item)
     elif (cli_args.myip):
         print (whatismyip.whatismyip())
-    elif (cli_args.NS):
-        print (dnschecker.ns(cli_args.NS))
-    elif (cli_args.A):
-        print (dnschecker.a(cli_args.A))
-    elif (cli_args.MX):
-        print (dnschecker.mx(cli_args.MX))
-    elif (cli_args.TXT):
-        print (dnschecker.txt(cli_args.TXT))
-    elif (cli_args.list):
-        print (dnschecker.ns(cli_args.list))
-        print (dnschecker.a(cli_args.list))
-        print (dnschecker.mx(cli_args.list))
-        print (dnschecker.txt(cli_args.list))
     else:
         print ("Default")
 
