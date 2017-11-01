@@ -22,8 +22,8 @@ def ns(url):
     for rdata in nsAnswers:
         nameservers.append(str(rdata))
 
-    combined_ns['whois'] = whois_ns
-    combined_ns['ns'] = nameservers
+    combined_ns['WHOIS NS'] = whois_ns
+    combined_ns['DOMAIN NS'] = nameservers
     return(combined_ns)
 
 def mx(url):
