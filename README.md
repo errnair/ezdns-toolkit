@@ -17,7 +17,7 @@ The script can also accept arguments for various tasks like:
 - List the TXT records of a domain.
 - List all the DNS records of a domain.
 
-```python
+```
 $ python main.py --help
 usage: main.py [-h] [-i [MYIP]] [-ns NS] [-a A] [-mx MX] [-txt TXT] [-l LIST]
 
