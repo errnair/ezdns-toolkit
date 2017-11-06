@@ -34,7 +34,7 @@ optional arguments:
 
 #### Usage
 
-- What is my IP (WAN IP)
+1. What is my IP (WAN IP)
 ```
 $ python main.py --myip
 XXX.XXX.XXX.XXX
@@ -43,7 +43,7 @@ $ python main.py -i
 XXX.XXX.XXX.XXX
 ```
 
-- Display the Nameserver Records
+2. Display the Nameserver Records
 ```
 $ python main.py -ns stackoverflow.com
 
@@ -61,7 +61,7 @@ Nameservers
         ns-cloud-e2.googledomains.com.
 ```
   
-- Display the A Records
+3. Display the A Records
 ```
 $ python main.py -a stackoverflow.com
 
@@ -73,7 +73,7 @@ A Record(s)
   > 151.101.193.69
 ```
   
-- Display the MX Records
+4. Display the MX Records
 ```
 $ python main.py -mx stackoverflow.com
 
@@ -92,7 +92,7 @@ MX Record(s)
   > 0 muchbits.com.
 ```
   
-- Display the TXT Records
+5. Display the TXT Records
 ```
 $ python main.py -txt google.com
 
@@ -110,6 +110,42 @@ TXT Record(s)
   > "v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org ip4:64.34.80.172 include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net ~all"
 ```
   
-- Display all the DNS Records
+6. Display all the DNS Records
 ```
+$ python main.py -l stackoverflow.com
+
+>> Nameservers
+   ===========
+  > WHOIS NS
+        ns-1033.awsdns-01.org
+        ns-358.awsdns-44.com
+        ns-cloud-e1.googledomains.com
+        ns-cloud-e2.googledomains.com
+  > DOMAIN NS
+        ns-1033.awsdns-01.org.
+        ns-358.awsdns-44.com.
+        ns-cloud-e1.googledomains.com.
+        ns-cloud-e2.googledomains.com.
+
+>> A Record(s)
+   ===========
+  > 151.101.1.69
+  > 151.101.65.69
+  > 151.101.129.69
+  > 151.101.193.69
+
+>> MX Record(s)
+   ============
+  > 1 aspmx.l.google.com.
+  > 5 alt1.aspmx.l.google.com.
+  > 5 alt2.aspmx.l.google.com.
+  > 10 alt3.aspmx.l.google.com.
+  > 10 alt4.aspmx.l.google.com.
+
+>> TXT Record(s)
+   =============
+  > "MS=ms52592611"
+  > "google-site-verification=o3EMam8yBGo1yEjyybIiZcOunGHOQKpo8JmOtp9n1BU"
+  > "google-site-verification=rdWtMbplKjbRHGr2dNONfwkqithlUvjr3u6i8QEz_mo"
+  > "v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org ip4:64.34.80.172 include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net ~all"
 ```
