@@ -75,10 +75,39 @@ A Record(s)
   
 - Display the MX Records
 ```
+$ python main.py -mx stackoverflow.com
+
+MX Record(s)
+============
+  > 1 aspmx.l.google.com.
+  > 5 alt1.aspmx.l.google.com.
+  > 5 alt2.aspmx.l.google.com.
+  > 10 alt3.aspmx.l.google.com.
+  > 10 alt4.aspmx.l.google.com.
+  
+$ python main.py -mx muchbits.com
+
+MX Record(s)
+============
+  > 0 muchbits.com.
 ```
   
 - Display the TXT Records
 ```
+$ python main.py -txt google.com
+
+TXT Record(s)
+=============
+  > "v=spf1 include:_spf.google.com ~all"
+
+$ python main.py -txt stackoverflow.com
+
+TXT Record(s)
+=============
+  > "MS=ms52592611"
+  > "google-site-verification=o3EMam8yBGo1yEjyybIiZcOunGHOQKpo8JmOtp9n1BU"
+  > "google-site-verification=rdWtMbplKjbRHGr2dNONfwkqithlUvjr3u6i8QEz_mo"
+  > "v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org ip4:64.34.80.172 include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net ~all"
 ```
   
 - Display all the DNS Records
