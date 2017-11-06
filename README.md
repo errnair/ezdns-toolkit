@@ -43,7 +43,7 @@ $ python main.py -i
 XXX.XXX.XXX.XXX
 ```
 
-- Display the Nameservers
+- Display the Nameserver Records
 ```
 $ python main.py -ns stackoverflow.com
 
@@ -59,4 +59,28 @@ Nameservers
         ns-1033.awsdns-01.org.
         ns-cloud-e1.googledomains.com.
         ns-cloud-e2.googledomains.com.
+```
+  
+- Display the A Records
+```
+$ python main.py -a stackoverflow.com
+
+A Record(s)
+===========
+  > 151.101.1.69
+  > 151.101.65.69
+  > 151.101.129.69
+  > 151.101.193.69
+```
+  
+- Display the MX Records
+```
+```
+  
+- Display the TXT Records
+```
+```
+  
+- Display all the DNS Records
+```
 ```
