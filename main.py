@@ -13,6 +13,11 @@ def main():
     cli_argparser.add_argument('-mx', '--MX', help="Get a domain's MX record.", required=False)
     cli_argparser.add_argument('-txt', '--TXT', help="Get a domain's TXT record(s).", required=False)
     cli_argparser.add_argument('-l', '--list', help="Get all the DNS record(s) of a domain.", required=False)
+
+    if len(sys.argv)==1:
+        cli_argparser.print_help()
+        sys.exit(1)    
+
     cli_args = cli_argparser.parse_args()
 
     if (cli_args.NS):
@@ -57,7 +62,8 @@ def main():
     elif (cli_args.myip):
         print (whatismyip.whatismyip())
     else:
-        print ("Default")
+        cli_argparser.print_help()
+        sys.exit(1)    
 
 if __name__ == '__main__':
     sys.exit(main())
