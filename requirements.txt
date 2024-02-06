@@ -5,7 +5,7 @@ future==0.18.2
 idna==2.10
 pkg-resources==0.0.0
 python-whois==0.7.3
-requests==2.24.0
+requests==2.31.0
 requests-file==1.5.1
 six==1.15.0
 tldextract==2.2.3
