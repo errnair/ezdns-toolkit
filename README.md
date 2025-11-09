@@ -1,151 +1,238 @@
-### ezdns-toolkit - an easy-to-use DNS toolkit for humans.
+# ezdns-toolkit
 
-#### Requirements
+DNS lookup tool for querying records, WHOIS information, and network diagnostics.
 
-- Python 3.x
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE.md)
 
-#### Purpose
+## Features
 
-The purpose of this script is to list/display the DNS-related and domain-related information for a domain, in a simple, easy-to-understand format.  
-The script can also accept arguments for various tasks like:
+- Query all DNS record types (A, AAAA, MX, TXT, NS, CNAME, SOA, CAA, PTR)
+- WHOIS information extraction
+- Public IP detection
+- Multiple output formats (JSON, CSV, YAML, text)
+- Input validation and HTTPS-only connections
 
+## Installation
 
-- Check and display your WAN IP.
-- List the Nameservers for a domain, from both the Webhosting Provider (NS Records) and the Domain Registrar (WHOIS NS).
-- List the A record of a domain.
-- List the MX record of a domain.
-- List the TXT records of a domain.
-- List all the DNS records of a domain.
-
-```
-$ python main.py --help
-usage: main.py [-h] [-i [MYIP]] [-ns NS] [-a A] [-mx MX] [-txt TXT] [-l LIST]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -i [MYIP], --myip [MYIP]
-                        Get your WAN IP
-  -ns NS, --NS NS       Get a domain's NS records.
-  -a A, --A A           Get a domain's A record.
-  -mx MX, --MX MX       Get a domain's MX record.
-  -txt TXT, --TXT TXT   Get a domain's TXT record(s).
-  -l LIST, --list LIST  Get all the DNS record(s) of a domain.
+```bash
+pip install ezdns-toolkit
 ```
 
-#### Usage
+Or install from source:
 
-1. What is my IP (WAN IP)
-```
-$ python main.py --myip
-XXX.XXX.XXX.XXX
-
-$ python main.py -i
-XXX.XXX.XXX.XXX
+```bash
+git clone https://github.com/errnair/ezdns-toolkit.git
+cd ezdns-toolkit
+pip install -e .
 ```
 
-2. Display the Nameserver Records
+Development setup:
+
+```bash
+pip install -e ".[dev]"
 ```
-$ python main.py -ns stackoverflow.com
+
+Requires Python 3.8 or higher.
+
+## Quick Start
+
+```bash
+# Get your public IP
+ezdns --myip
+
+# Query DNS records
+ezdns -a example.com
+ezdns --mx example.com
+ezdns --txt example.com
+
+# Get all records
+ezdns --list example.com
+
+# Export as JSON
+ezdns -a example.com --format json
+
+# WHOIS lookup
+ezdns --whois example.com
+```
+
+## Usage
+
+### DNS Queries
+
+```bash
+# A records (IPv4)
+$ ezdns -a example.com
+93.184.216.34
+
+# AAAA records (IPv6)
+$ ezdns --aaaa example.com
+2606:2800:220:1:248:1893:25c8:1946
+
+# MX records (mail servers)
+$ ezdns --mx example.com
+10 mail.example.com.
+
+# TXT records (SPF, DKIM, etc.)
+$ ezdns --txt example.com
+"v=spf1 mx -all"
+
+# Nameservers (WHOIS + DNS)
+$ ezdns --nameservers example.com
 
 Nameservers
 ===========
   > WHOIS NS
-        ns-1033.awsdns-01.org
-        ns-358.awsdns-44.com
-        ns-cloud-e1.googledomains.com
-        ns-cloud-e2.googledomains.com
+        ns1.example.com
   > DOMAIN NS
-        ns-358.awsdns-44.com.
-        ns-1033.awsdns-01.org.
-        ns-cloud-e1.googledomains.com.
-        ns-cloud-e2.googledomains.com.
+        ns1.example.com.
+
+# Reverse DNS
+$ ezdns --ptr 93.184.216.34
+example.com.
 ```
-  
-3. Display the A Records
+
+### Output Formats
+
+```bash
+# JSON
+$ ezdns -a example.com --format json
+{
+  "domain": "example.com",
+  "record_type": "A",
+  "records": ["93.184.216.34"]
+}
+
+# CSV
+$ ezdns --list example.com --format csv > records.csv
+
+# YAML
+$ ezdns -a example.com --format yaml
 ```
-$ python main.py -a stackoverflow.com
 
-A Record(s)
-===========
-  > 151.101.1.69
-  > 151.101.65.69
-  > 151.101.129.69
-  > 151.101.193.69
+### Python Library
+
+```python
+from ezdns import DNSResolver, get_public_ip
+
+# DNS queries
+resolver = DNSResolver()
+a_records = resolver.get_a_records('example.com')
+mx_records = resolver.get_mx_records('example.com')
+all_records = resolver.get_all_records('example.com')
+
+# WHOIS
+from ezdns import get_whois_info
+whois_data = get_whois_info('example.com')
+
+# Public IP
+my_ip = get_public_ip()
 ```
-  
-4. Display the MX Records
+
+Error handling:
+
+```python
+from ezdns import DNSResolver, DNSQueryError, InvalidDomainError
+
+resolver = DNSResolver()
+try:
+    records = resolver.get_a_records('example.com')
+except InvalidDomainError as e:
+    print(f'Invalid domain: {e.message}')
+except DNSQueryError as e:
+    print(f'Query failed: {e.message}')
 ```
-$ python main.py -mx stackoverflow.com
 
-MX Record(s)
-============
-  > 1 aspmx.l.google.com.
-  > 5 alt1.aspmx.l.google.com.
-  > 5 alt2.aspmx.l.google.com.
-  > 10 alt3.aspmx.l.google.com.
-  > 10 alt4.aspmx.l.google.com.
-  
-$ python main.py -mx muchbits.com
+Custom configuration:
 
-MX Record(s)
-============
-  > 0 muchbits.com.
+```python
+# Use specific DNS servers with custom timeout
+resolver = DNSResolver(
+    timeout=10.0,
+    nameservers=['8.8.8.8', '8.8.4.4']
+)
 ```
-  
-5. Display the TXT Records
+
+## Available DNS Record Types
+
+- **A**: IPv4 addresses
+- **AAAA**: IPv6 addresses
+- **MX**: Mail exchange servers
+- **TXT**: Text records (SPF, DKIM, DMARC)
+- **NS**: Nameservers
+- **CNAME**: Canonical name aliases
+- **SOA**: Start of authority
+- **CAA**: Certificate authority authorization
+- **PTR**: Reverse DNS lookup
+
+## Configuration
+
+Set environment variables:
+
+```bash
+export EZDNS_DNS_TIMEOUT=10.0
+export EZDNS_VERBOSE=true
+export EZDNS_OUTPUT_FORMAT=json
 ```
-$ python main.py -txt google.com
 
-TXT Record(s)
-=============
-  > "v=spf1 include:_spf.google.com ~all"
+## Command-Line Options
 
-$ python main.py -txt stackoverflow.com
-
-TXT Record(s)
-=============
-  > "MS=ms52592611"
-  > "google-site-verification=o3EMam8yBGo1yEjyybIiZcOunGHOQKpo8JmOtp9n1BU"
-  > "google-site-verification=rdWtMbplKjbRHGr2dNONfwkqithlUvjr3u6i8QEz_mo"
-  > "v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org ip4:64.34.80.172 include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net ~all"
 ```
-  
-6. Display all the DNS Records
+usage: ezdns [-h] [--version] [-v] [-f {text,json,csv,yaml}]
+             [-i [MYIP]] [-ns NS] [-a A] [-aaaa AAAA] [-mx MX]
+             [-txt TXT] [-cname CNAME] [-soa SOA] [-caa CAA]
+             [-ptr PTR] [-l LIST] [-w WHOIS]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  -v, --verbose         enable verbose output
+  -f, --format          output format (text, json, csv, yaml)
+  -i, --myip            get your public IP address
+  -ns, --nameservers    get nameserver records
+  -a, --a-records       get A records
+  -aaaa, --aaaa-records get AAAA records
+  -mx, --mx-records     get MX records
+  -txt, --txt-records   get TXT records
+  -cname                get CNAME records
+  -soa                  get SOA record
+  -caa                  get CAA records
+  -ptr                  reverse DNS lookup
+  -l, --list            get all DNS records
+  -w, --whois           get WHOIS information
 ```
-$ python main.py -l stackoverflow.com
 
->> Nameservers
-   ===========
-  > WHOIS NS
-        ns-1033.awsdns-01.org
-        ns-358.awsdns-44.com
-        ns-cloud-e1.googledomains.com
-        ns-cloud-e2.googledomains.com
-  > DOMAIN NS
-        ns-1033.awsdns-01.org.
-        ns-358.awsdns-44.com.
-        ns-cloud-e1.googledomains.com.
-        ns-cloud-e2.googledomains.com.
+## Development
 
->> A Record(s)
-   ===========
-  > 151.101.1.69
-  > 151.101.65.69
-  > 151.101.129.69
-  > 151.101.193.69
+Run tests:
 
->> MX Record(s)
-   ============
-  > 1 aspmx.l.google.com.
-  > 5 alt1.aspmx.l.google.com.
-  > 5 alt2.aspmx.l.google.com.
-  > 10 alt3.aspmx.l.google.com.
-  > 10 alt4.aspmx.l.google.com.
-
->> TXT Record(s)
-   =============
-  > "MS=ms52592611"
-  > "google-site-verification=o3EMam8yBGo1yEjyybIiZcOunGHOQKpo8JmOtp9n1BU"
-  > "google-site-verification=rdWtMbplKjbRHGr2dNONfwkqithlUvjr3u6i8QEz_mo"
-  > "v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org ip4:64.34.80.172 include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net ~all"
+```bash
+make test
+make test-coverage
 ```
+
+Code quality:
+
+```bash
+make lint
+make format
+```
+
+Build package:
+
+```bash
+make build
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+
+## License
+
+GNU General Public License v3.0 - see [LICENSE.md](LICENSE.md)
+
+## Links
+
+- [Issue Tracker](https://github.com/errnair/ezdns-toolkit/issues)
+- [Changelog](CHANGELOG.md)
