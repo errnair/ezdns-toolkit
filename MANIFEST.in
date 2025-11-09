@@ -1,0 +1,15 @@
+include README.md
+include LICENSE.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include requirements.txt
+include requirements-dev.txt
+recursive-include src/ezdns *.py py.typed
+recursive-include docs *.md *.rst
+recursive-include tests *.py
+prune docs/_build
+prune **/__pycache__
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *~
+global-exclude .DS_Store
