@@ -1,12 +1,8 @@
-certifi==2024.7.4
-chardet==3.0.4
-dnspython==2.6.1
-future==0.18.3
-idna==3.7
-pkg-resources==0.0.0
-python-whois==0.7.3
-requests==2.32.4
-requests-file==1.5.1
-six==1.15.0
-tldextract==2.2.3
-urllib3==2.5.0
+# Core DNS and networking dependencies
+dnspython>=2.6.1
+python-whois>=0.7.3
+tldextract>=5.0.0
+certifi>=2024.7.4
+
+# Optional: YAML support (uncomment if needed)
+# PyYAML>=6.0
