@@ -211,9 +211,12 @@ class TestCLIMain:
     def test_main_invalid_format(self, capsys):
         """Handling of invalid output format."""
         with patch('sys.argv', ['ezdns', '-a', 'example.com', '--format', 'invalid']):
-            exit_code = main()
+            with pytest.raises(SystemExit) as exc_info:
+                main()
 
-        assert exit_code == 1
+        assert exc_info.value.code == 2
+        captured = capsys.readouterr()
+        assert 'invalid choice' in captured.err
 
 
 class TestCLIHandlers:
