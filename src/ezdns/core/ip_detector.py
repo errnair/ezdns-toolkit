@@ -20,6 +20,11 @@ class IPDetector:
         self.timeout = timeout or settings.IP_DETECTION_TIMEOUT
         self.services = settings.IP_DETECTION_SERVICES
 
+    def _looks_like_ip(self, text: str) -> bool:
+        """Check if text looks like an IP address."""
+        from ..utils.validators import is_ipv4, is_ipv6
+        return is_ipv4(text) or is_ipv6(text)
+
     def _query_service(self, service_url: str) -> Optional[str]:
         """Query IP detection service."""
         try:
@@ -53,7 +58,10 @@ class IPDetector:
                     else:
                         return list(data.values())[0] if data else None
                 except json.JSONDecodeError:
-                    return content if content else None
+                    # Treat as plain text response, but validate it looks like an IP
+                    if content and self._looks_like_ip(content):
+                        return content
+                    return None
 
         except urllib.error.HTTPError as e:
             logger.debug(f'HTTP error from {service_url}: {e.code} {e.reason}')

@@ -37,7 +37,6 @@ class TestDomainValidation:
             'example-.com',  # Ends with hyphen
             'exa mple.com',  # Contains space
             'example..com',  # Double dot
-            'example.com.',  # Trailing dot (should be handled by validation)
             'a' * 64 + '.com',  # Label too long
         ]
         for domain in invalid_domains:

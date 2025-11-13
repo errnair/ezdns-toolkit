@@ -267,18 +267,25 @@ class TestYAMLFormatter:
         assert 'records:' in result
         assert 'A:' in result or '- 93.184.216.34' in result
 
-    @patch('ezdns.utils.formatters.yaml', None)
     def test_format_fallback_to_json_when_yaml_not_available(self):
         """Fallback to JSON when PyYAML is not installed."""
         # This tests the ImportError handling
-        data = {'key': 'value'}
+        import builtins
+        from unittest.mock import patch as mock_patch
+        real_import = builtins.__import__
 
-        # Should fall back to JSON format
-        result = YAMLFormatter.format(data)
+        def mock_import(name, *args, **kwargs):
+            if name == 'yaml':
+                raise ImportError('No module named yaml')
+            return real_import(name, *args, **kwargs)
 
-        # Should be valid JSON
-        parsed = json.loads(result)
-        assert parsed['key'] == 'value'
+        with mock_patch('builtins.__import__', side_effect=mock_import):
+            data = {'key': 'value'}
+            result = YAMLFormatter.format(data)
+
+            # Should be valid JSON
+            parsed = json.loads(result)
+            assert parsed['key'] == 'value'
 
 
 class TestGetFormatter:

@@ -32,9 +32,8 @@ class WHOISLookup:
             logger.info(f'Successfully retrieved WHOIS data for {domain}')
             return self._parse_whois_data(whois_data)
 
-        except whois_lib.parser.PywhoisError as e:
-            logger.error(f'WHOIS parser error for {domain}: {e}')
-            raise WHOISQueryError(domain, f'Parser error: {e}')
+        except WHOISQueryError:
+            raise
 
         except Exception as e:
             logger.error(f'WHOIS query failed for {domain}: {e}')

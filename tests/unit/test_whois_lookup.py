@@ -143,14 +143,13 @@ class TestWHOISLookup:
     @patch('whois.whois')
     def test_query_parser_error(self, mock_whois):
         """Handling of WHOIS parser errors."""
-        from whois.parser import PywhoisError
-        mock_whois.side_effect = PywhoisError('Parse error')
+        mock_whois.side_effect = ValueError('Parse error')
 
         lookup = WHOISLookup()
         with pytest.raises(WHOISQueryError) as exc_info:
             lookup.query('example.com')
 
-        assert 'Parser error' in str(exc_info.value)
+        assert 'Parse error' in str(exc_info.value)
 
     @patch('whois.whois')
     def test_query_generic_exception(self, mock_whois):
