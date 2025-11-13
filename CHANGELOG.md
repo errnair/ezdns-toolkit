@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test suite with pytest
 - Type hints
 - pyproject.toml packaging (PEP 518)
+- Automatic fallback to public DNS servers (Google, Cloudflare, OpenDNS) for NS and SOA queries when local DNS fails
 
 ### Changed
 - Use `dns.resolver.resolve()` instead of deprecated `query()`

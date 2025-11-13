@@ -67,6 +67,10 @@ class DNSResolver:
 
         except dns.resolver.Timeout:
             logger.warning(f'DNS query timeout for {domain} ({record_type})')
+            # Try fallback with public DNS servers for certain record types
+            if record_type in ['NS', 'SOA'] and not hasattr(self, '_tried_fallback'):
+                logger.info(f'Attempting fallback query with public DNS servers')
+                return self._query_with_fallback(domain, record_type)
             raise DNSTimeoutError(record_type, domain)
 
         except dns.resolver.NXDOMAIN:
@@ -83,6 +87,10 @@ class DNSResolver:
 
         except dns.resolver.NoNameservers:
             logger.error(f'No nameservers available for {domain}')
+            # Try fallback with public DNS servers for certain record types
+            if record_type in ['NS', 'SOA'] and not hasattr(self, '_tried_fallback'):
+                logger.info(f'Attempting fallback query with public DNS servers')
+                return self._query_with_fallback(domain, record_type)
             raise DNSQueryError(
                 record_type,
                 domain,
@@ -96,6 +104,50 @@ class DNSResolver:
         except Exception as e:
             logger.error(f'Unexpected error querying {domain}: {e}')
             raise DNSQueryError(record_type, domain, f'Unexpected error: {e}')
+
+    def _query_with_fallback(self, domain: str, record_type: str) -> List[str]:
+        """Perform DNS query with fallback to public DNS servers."""
+        fallback_nameservers = [
+            ['8.8.8.8', '8.8.4.4'],           # Google Public DNS
+            ['1.1.1.1', '1.0.0.1'],           # Cloudflare DNS
+            ['208.67.222.222', '208.67.220.220']  # OpenDNS
+        ]
+
+        self._tried_fallback = True
+
+        for nameservers in fallback_nameservers:
+            try:
+                logger.debug(f'Trying fallback nameservers: {nameservers}')
+                fallback_resolver = dns.resolver.Resolver()
+                fallback_resolver.nameservers = nameservers
+                fallback_resolver.timeout = self.resolver.timeout
+                fallback_resolver.lifetime = min(self.resolver.lifetime, 5.0)
+
+                answers = fallback_resolver.resolve(domain, record_type)
+                results = [str(rdata) for rdata in answers]
+
+                logger.info(f'Fallback successful: Found {len(results)} {record_type} '
+                           f'record(s) for {domain} using {nameservers[0]}')
+                delattr(self, '_tried_fallback')
+                return results
+
+            except (dns.resolver.Timeout, dns.resolver.NoNameservers):
+                logger.debug(f'Fallback with {nameservers[0]} timed out, trying next')
+                continue
+            except dns.resolver.NXDOMAIN:
+                delattr(self, '_tried_fallback')
+                raise DNSQueryError(record_type, domain, 'Domain does not exist (NXDOMAIN)')
+            except dns.resolver.NoAnswer:
+                delattr(self, '_tried_fallback')
+                raise DNSNoRecordsError(record_type, domain)
+            except Exception as e:
+                logger.debug(f'Fallback with {nameservers[0]} failed: {e}')
+                continue
+
+        # All fallbacks failed
+        delattr(self, '_tried_fallback')
+        logger.error(f'All fallback nameservers failed for {domain} ({record_type})')
+        raise DNSTimeoutError(record_type, domain)
 
     def get_a_records(self, domain: str) -> List[str]:
         """Query A records for domain."""
