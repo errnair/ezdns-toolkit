@@ -152,9 +152,16 @@ def is_ipv6(address: str) -> bool:
     if not address:
         return False
 
+    # Check for invalid patterns
+    if address.startswith(':::') or address.endswith(':::'):
+        return False
+
     if '::' in address:
         parts = address.split('::')
         if len(parts) > 2:
+            return False
+        # Check for empty parts caused by leading/trailing ::
+        if parts[0] == '' and parts[1] == '':
             return False
 
     groups = address.replace('::', ':').split(':')
