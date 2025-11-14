@@ -1,7 +1,8 @@
 """WHOIS domain information lookup."""
 
 import logging
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
+
 import whois as whois_lib
 
 from ..config.settings import settings

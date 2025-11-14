@@ -2,8 +2,8 @@
 
 import re
 from typing import Tuple
-from .exceptions import InvalidDomainError
 
+from .exceptions import InvalidDomainError
 
 # RFC 1035 compliant domain validation patterns
 DOMAIN_LABEL_PATTERN = re.compile(r"^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", re.IGNORECASE)

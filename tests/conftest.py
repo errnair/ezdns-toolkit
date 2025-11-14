@@ -1,8 +1,9 @@
 """Pytest configuration and fixtures for ezdns tests."""
 
-import pytest
-from unittest.mock import Mock, MagicMock
+from unittest.mock import MagicMock, Mock
+
 import dns.resolver
+import pytest
 
 
 @pytest.fixture

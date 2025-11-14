@@ -1,11 +1,12 @@
 """Unit tests for WHOIS lookup module."""
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
 
 from ezdns.core.whois_lookup import WHOISLookup, get_whois_info, get_whois_nameservers
-from ezdns.utils.exceptions import WHOISQueryError, InvalidDomainError
+from ezdns.utils.exceptions import InvalidDomainError, WHOISQueryError
 
 
 class TestWHOISLookup:

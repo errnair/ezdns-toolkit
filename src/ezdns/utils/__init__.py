@@ -1,29 +1,29 @@
 """Utility modules for ezdns toolkit."""
 
 from .exceptions import (
-    EZDNSError,
-    InvalidDomainError,
+    ConfigurationError,
+    DNSNoRecordsError,
     DNSQueryError,
     DNSTimeoutError,
-    DNSNoRecordsError,
-    WHOISQueryError,
+    EZDNSError,
+    InvalidDomainError,
     IPDetectionError,
     NetworkError,
-    ConfigurationError,
-)
-from .validators import (
-    validate_domain,
-    validate_domain_with_subdomain,
-    is_valid_domain,
-    is_ipv4,
-    is_ipv6,
+    WHOISQueryError,
 )
 from .formatters import (
-    TextFormatter,
-    JSONFormatter,
     CSVFormatter,
+    JSONFormatter,
+    TextFormatter,
     YAMLFormatter,
     get_formatter,
+)
+from .validators import (
+    is_ipv4,
+    is_ipv6,
+    is_valid_domain,
+    validate_domain,
+    validate_domain_with_subdomain,
 )
 
 __all__ = [

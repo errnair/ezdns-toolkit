@@ -1,15 +1,16 @@
 """DNS query operations using dnspython."""
 
 import logging
-from typing import List, Dict, Optional
-import dns.resolver
+from typing import Dict, List, Optional
+
 import dns.exception
+import dns.resolver
 
 from ..config.settings import settings
 from ..utils.exceptions import (
+    DNSNoRecordsError,
     DNSQueryError,
     DNSTimeoutError,
-    DNSNoRecordsError,
 )
 from ..utils.validators import validate_domain
 

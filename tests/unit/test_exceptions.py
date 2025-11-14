@@ -1,16 +1,17 @@
 """Unit tests for custom exceptions."""
 
 import pytest
+
 from ezdns.utils.exceptions import (
-    EZDNSError,
-    InvalidDomainError,
+    ConfigurationError,
+    DNSNoRecordsError,
     DNSQueryError,
     DNSTimeoutError,
-    DNSNoRecordsError,
-    WHOISQueryError,
+    EZDNSError,
+    InvalidDomainError,
     IPDetectionError,
     NetworkError,
-    ConfigurationError,
+    WHOISQueryError,
 )
 
 

@@ -4,22 +4,22 @@ This module implements the CLI using argparse with proper error handling,
 logging, and output formatting.
 """
 
-import sys
 import argparse
 import logging
+import sys
 from typing import Optional
 
 from .config import settings
 from .core import DNSResolver, WHOISLookup, get_public_ip
 from .utils import (
-    TextFormatter,
-    get_formatter,
+    DNSNoRecordsError,
+    DNSQueryError,
     EZDNSError,
     InvalidDomainError,
-    DNSQueryError,
-    DNSNoRecordsError,
-    WHOISQueryError,
     IPDetectionError,
+    TextFormatter,
+    WHOISQueryError,
+    get_formatter,
 )
 
 # Configure logging

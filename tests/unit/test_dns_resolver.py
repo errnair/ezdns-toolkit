@@ -1,15 +1,16 @@
 """Unit tests for DNS resolver module."""
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
-import dns.resolver
+from unittest.mock import MagicMock, Mock, patch
+
 import dns.exception
+import dns.resolver
+import pytest
 
 from ezdns.core.dns_resolver import DNSResolver, get_a_records
 from ezdns.utils.exceptions import (
+    DNSNoRecordsError,
     DNSQueryError,
     DNSTimeoutError,
-    DNSNoRecordsError,
     InvalidDomainError,
 )
 

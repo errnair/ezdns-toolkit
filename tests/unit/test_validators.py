@@ -1,14 +1,15 @@
 """Unit tests for validation utilities."""
 
 import pytest
+
+from ezdns.utils.exceptions import InvalidDomainError
 from ezdns.utils.validators import (
-    is_valid_domain,
-    validate_domain,
     is_ipv4,
     is_ipv6,
+    is_valid_domain,
     is_valid_domain_label,
+    validate_domain,
 )
-from ezdns.utils.exceptions import InvalidDomainError
 
 
 class TestDomainValidation:

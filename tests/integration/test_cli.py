@@ -1,11 +1,12 @@
 """Integration tests for CLI interface."""
 
-import pytest
-from unittest.mock import patch, Mock
 import sys
 from io import StringIO
+from unittest.mock import Mock, patch
 
-from ezdns.cli import main, create_parser
+import pytest
+
+from ezdns.cli import create_parser, main
 
 
 class TestCLIParser:

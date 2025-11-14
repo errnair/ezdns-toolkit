@@ -1,13 +1,14 @@
 """Unit tests for output formatters."""
 
-import pytest
 import json
 from unittest.mock import patch
 
+import pytest
+
 from ezdns.utils.formatters import (
-    TextFormatter,
-    JSONFormatter,
     CSVFormatter,
+    JSONFormatter,
+    TextFormatter,
     YAMLFormatter,
     get_formatter,
 )

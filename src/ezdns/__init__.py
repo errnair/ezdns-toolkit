@@ -22,26 +22,26 @@ Command-line usage:
 from .config import settings
 from .core import (
     DNSResolver,
-    WHOISLookup,
     IPDetector,
+    WHOISLookup,
     get_a_records,
     get_mx_records,
-    get_txt_records,
     get_ns_records,
+    get_public_ip,
+    get_txt_records,
     get_whois_info,
     get_whois_nameservers,
-    get_public_ip,
 )
 from .utils import (
-    EZDNSError,
-    InvalidDomainError,
+    DNSNoRecordsError,
     DNSQueryError,
     DNSTimeoutError,
-    DNSNoRecordsError,
-    WHOISQueryError,
+    EZDNSError,
+    InvalidDomainError,
     IPDetectionError,
-    validate_domain,
+    WHOISQueryError,
     is_valid_domain,
+    validate_domain,
 )
 
 __version__ = settings.VERSION

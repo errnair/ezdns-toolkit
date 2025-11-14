@@ -1,9 +1,10 @@
 """Unit tests for IP detector module."""
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock, mock_open
 import json
 import urllib.error
+from unittest.mock import MagicMock, Mock, mock_open, patch
+
+import pytest
 
 from ezdns.core.ip_detector import IPDetector, get_public_ip
 from ezdns.utils.exceptions import IPDetectionError
