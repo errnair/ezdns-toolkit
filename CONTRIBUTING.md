@@ -67,7 +67,7 @@ def test_get_a_records(self, mock_resolve):
 
 ## Pull Requests
 
-1. Fork and create a branch from `master`
+1. Fork and create a branch from `main`
 2. Make your changes
 3. Add tests
 4. Run `make check` to verify everything passes

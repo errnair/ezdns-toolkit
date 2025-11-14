@@ -15,11 +15,7 @@ DNS lookup tool for querying records, WHOIS information, and network diagnostics
 
 ## Installation
 
-```bash
-pip install ezdns-toolkit
-```
-
-Or install from source:
+Not yet on PyPI. Install from source:
 
 ```bash
 git clone https://github.com/errnair/ezdns-toolkit.git
@@ -27,13 +23,13 @@ cd ezdns-toolkit
 pip install -e .
 ```
 
-Development setup:
+For development:
 
 ```bash
 pip install -e ".[dev]"
 ```
 
-Requires Python 3.9 or higher.
+Requires Python 3.9+.
 
 ## Quick Start
 
