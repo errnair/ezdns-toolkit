@@ -6,14 +6,14 @@ from .exceptions import InvalidDomainError
 
 
 # RFC 1035 compliant domain validation patterns
-DOMAIN_LABEL_PATTERN = re.compile(r'^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$', re.IGNORECASE)
+DOMAIN_LABEL_PATTERN = re.compile(r"^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", re.IGNORECASE)
 DOMAIN_PATTERN = re.compile(
-    r'^(?=.{1,253}$)'  # Total length must be 1-253 characters
-    r'(?!-)'  # Cannot start with hyphen
-    r'([a-z0-9-]{1,63}\.)*'  # Subdomains
-    r'[a-z0-9-]{1,63}'  # TLD
-    r'(?<!-)$',  # Cannot end with hyphen
-    re.IGNORECASE
+    r"^(?=.{1,253}$)"  # Total length must be 1-253 characters
+    r"(?!-)"  # Cannot start with hyphen
+    r"([a-z0-9-]{1,63}\.)*"  # Subdomains
+    r"[a-z0-9-]{1,63}"  # TLD
+    r"(?<!-)$",  # Cannot end with hyphen
+    re.IGNORECASE,
 )
 
 # Maximum lengths per RFC specifications
@@ -37,7 +37,7 @@ def is_valid_domain(domain: str) -> bool:
 
     domain = domain.strip().lower()
 
-    if domain.endswith('.'):
+    if domain.endswith("."):
         domain = domain[:-1]
 
     if len(domain) < MIN_DOMAIN_LENGTH or len(domain) > MAX_DOMAIN_LENGTH:
@@ -46,7 +46,7 @@ def is_valid_domain(domain: str) -> bool:
     if not DOMAIN_PATTERN.match(domain):
         return False
 
-    labels = domain.split('.')
+    labels = domain.split(".")
     if not labels or len(labels) < 2:
         return False
 
@@ -56,54 +56,55 @@ def is_valid_domain(domain: str) -> bool:
 def validate_domain(domain: str, allow_subdomain: bool = True) -> str:
     """Validate and normalize domain name."""
     if not domain:
-        raise InvalidDomainError(domain or '', 'Domain name cannot be empty')
+        raise InvalidDomainError(domain or "", "Domain name cannot be empty")
 
     if not isinstance(domain, str):
-        raise InvalidDomainError(str(domain), 'Domain must be a string')
+        raise InvalidDomainError(str(domain), "Domain must be a string")
 
     domain = domain.strip().lower()
 
-    if '://' in domain:
-        domain = domain.split('://', 1)[1]
+    if "://" in domain:
+        domain = domain.split("://", 1)[1]
 
-    if '/' in domain:
-        domain = domain.split('/', 1)[0]
+    if "/" in domain:
+        domain = domain.split("/", 1)[0]
 
-    if ':' in domain:
-        domain = domain.split(':', 1)[0]
+    if ":" in domain:
+        domain = domain.split(":", 1)[0]
 
-    if domain.endswith('.'):
+    if domain.endswith("."):
         domain = domain[:-1]
 
-    if '\x00' in domain:
-        raise InvalidDomainError(domain, 'Domain contains null bytes')
+    if "\x00" in domain:
+        raise InvalidDomainError(domain, "Domain contains null bytes")
 
     if any(ord(char) < 32 or ord(char) == 127 for char in domain):
-        raise InvalidDomainError(domain, 'Domain contains control characters')
+        raise InvalidDomainError(domain, "Domain contains control characters")
 
-    dangerous_chars = ['<', '>', '"', "'", '`', '\\', '|', ';', '&', '$', '(', ')']
+    dangerous_chars = ["<", ">", '"', "'", "`", "\\", "|", ";", "&", "$", "(", ")"]
     if any(char in domain for char in dangerous_chars):
-        raise InvalidDomainError(domain, 'Domain contains invalid characters')
+        raise InvalidDomainError(domain, "Domain contains invalid characters")
 
     if len(domain) < MIN_DOMAIN_LENGTH:
-        raise InvalidDomainError(domain, f'Domain too short (minimum {MIN_DOMAIN_LENGTH} characters)')
+        raise InvalidDomainError(
+            domain, f"Domain too short (minimum {MIN_DOMAIN_LENGTH} characters)"
+        )
 
     if len(domain) > MAX_DOMAIN_LENGTH:
-        raise InvalidDomainError(domain, f'Domain too long (maximum {MAX_DOMAIN_LENGTH} characters)')
+        raise InvalidDomainError(
+            domain, f"Domain too long (maximum {MAX_DOMAIN_LENGTH} characters)"
+        )
 
     if not DOMAIN_PATTERN.match(domain):
-        raise InvalidDomainError(domain, 'Domain does not match RFC 1035 format')
+        raise InvalidDomainError(domain, "Domain does not match RFC 1035 format")
 
-    labels = domain.split('.')
+    labels = domain.split(".")
     if len(labels) < 2:
-        raise InvalidDomainError(domain, 'Domain must have at least two labels (e.g., example.com)')
+        raise InvalidDomainError(domain, "Domain must have at least two labels (e.g., example.com)")
 
     for i, label in enumerate(labels):
         if not is_valid_domain_label(label):
-            raise InvalidDomainError(
-                domain,
-                f'Invalid label "{label}" at position {i + 1}'
-            )
+            raise InvalidDomainError(domain, f'Invalid label "{label}" at position {i + 1}')
 
     return domain
 
@@ -112,7 +113,7 @@ def validate_domain_with_subdomain(domain: str) -> Tuple[str, bool]:
     """Validate domain and check if subdomain."""
     normalized = validate_domain(domain, allow_subdomain=True)
 
-    labels = normalized.split('.')
+    labels = normalized.split(".")
     is_subdomain = len(labels) > 2
 
     return normalized, is_subdomain
@@ -121,13 +122,13 @@ def validate_domain_with_subdomain(domain: str) -> Tuple[str, bool]:
 def sanitize_input(value: str, max_length: int = 1000) -> str:
     """Sanitize string input."""
     if not isinstance(value, str):
-        raise ValueError('Input must be a string')
+        raise ValueError("Input must be a string")
 
-    value = value.replace('\x00', '')
+    value = value.replace("\x00", "")
     value = value.strip()
 
     if len(value) > max_length:
-        raise ValueError(f'Input too long (maximum {max_length} characters)')
+        raise ValueError(f"Input too long (maximum {max_length} characters)")
 
     return value
 
@@ -137,7 +138,7 @@ def is_ipv4(address: str) -> bool:
     if not address:
         return False
 
-    parts = address.split('.')
+    parts = address.split(".")
     if len(parts) != 4:
         return False
 
@@ -153,18 +154,18 @@ def is_ipv6(address: str) -> bool:
         return False
 
     # Check for invalid patterns
-    if address.startswith(':::') or address.endswith(':::'):
+    if address.startswith(":::") or address.endswith(":::"):
         return False
 
-    if '::' in address:
-        parts = address.split('::')
+    if "::" in address:
+        parts = address.split("::")
         if len(parts) > 2:
             return False
         # Check for empty parts caused by leading/trailing ::
-        if parts[0] == '' and parts[1] == '':
+        if parts[0] == "" and parts[1] == "":
             return False
 
-    groups = address.replace('::', ':').split(':')
+    groups = address.replace("::", ":").split(":")
     if len(groups) > 8:
         return False
 

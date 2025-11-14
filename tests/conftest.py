@@ -36,15 +36,15 @@ def sample_ip_address():
 def mock_whois_data():
     """Create mock WHOIS data for testing."""
     mock_data = Mock()
-    mock_data.name_servers = ['ns1.example.com', 'ns2.example.com']
-    mock_data.registrar = 'Example Registrar Inc.'
-    mock_data.creation_date = '2020-01-01'
-    mock_data.expiration_date = '2025-01-01'
-    mock_data.updated_date = '2024-01-01'
-    mock_data.status = ['clientTransferProhibited']
-    mock_data.emails = ['admin@example.com']
-    mock_data.name = 'John Doe'
-    mock_data.org = 'Example Organization'
+    mock_data.name_servers = ["ns1.example.com", "ns2.example.com"]
+    mock_data.registrar = "Example Registrar Inc."
+    mock_data.creation_date = "2020-01-01"
+    mock_data.expiration_date = "2025-01-01"
+    mock_data.updated_date = "2024-01-01"
+    mock_data.status = ["clientTransferProhibited"]
+    mock_data.emails = ["admin@example.com"]
+    mock_data.name = "John Doe"
+    mock_data.org = "Example Organization"
     return mock_data
 
 
@@ -54,7 +54,7 @@ def mock_dns_answers():
     answers = []
     for i in range(3):
         mock_answer = Mock()
-        mock_answer.__str__ = Mock(return_value=f'192.0.2.{i}')
+        mock_answer.__str__ = Mock(return_value=f"192.0.2.{i}")
         answers.append(mock_answer)
     return answers
 

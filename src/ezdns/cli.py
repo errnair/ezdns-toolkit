@@ -40,7 +40,7 @@ def setup_logging(verbose: bool = False, log_file: Optional[str] = None) -> None
 
     console_handler = logging.StreamHandler()
     console_handler.setLevel(log_level)
-    console_formatter = logging.Formatter('%(levelname)s: %(message)s')
+    console_formatter = logging.Formatter("%(levelname)s: %(message)s")
     console_handler.setFormatter(console_formatter)
     root_logger.addHandler(console_handler)
 
@@ -51,7 +51,7 @@ def setup_logging(verbose: bool = False, log_file: Optional[str] = None) -> None
         file_handler.setFormatter(file_formatter)
         root_logger.addHandler(file_handler)
 
-    logger.debug('Logging configured')
+    logger.debug("Logging configured")
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -61,115 +61,92 @@ def create_parser() -> argparse.ArgumentParser:
         Configured ArgumentParser instance
     """
     parser = argparse.ArgumentParser(
-        prog='ezdns',
-        description='DNS lookup and domain information tool',
-        epilog='For more information, visit: https://github.com/errnair/ezdns-toolkit'
+        prog="ezdns",
+        description="DNS lookup and domain information tool",
+        epilog="For more information, visit: https://github.com/errnair/ezdns-toolkit",
     )
 
-    parser.add_argument(
-        '--version',
-        action='version',
-        version=f'%(prog)s {settings.VERSION}'
-    )
+    parser.add_argument("--version", action="version", version=f"%(prog)s {settings.VERSION}")
+
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
 
     parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Enable verbose output'
-    )
-
-    parser.add_argument(
-        '-f', '--format',
-        choices=['text', 'json', 'csv', 'yaml'],
+        "-f",
+        "--format",
+        choices=["text", "json", "csv", "yaml"],
         default=settings.DEFAULT_OUTPUT_FORMAT,
-        help=f'Output format (default: {settings.DEFAULT_OUTPUT_FORMAT})'
+        help=f"Output format (default: {settings.DEFAULT_OUTPUT_FORMAT})",
+    )
+
+    parser.add_argument("--log-file", metavar="PATH", help="Write logs to file")
+
+    parser.add_argument(
+        "-i", "--myip", nargs="?", const=True, help="Get your public WAN IP address"
     )
 
     parser.add_argument(
-        '--log-file',
-        metavar='PATH',
-        help='Write logs to file'
+        "-ns",
+        "--nameservers",
+        metavar="DOMAIN",
+        help="Get nameserver records (NS) from both WHOIS and DNS",
     )
 
     parser.add_argument(
-        '-i', '--myip',
-        nargs='?',
-        const=True,
-        help='Get your public WAN IP address'
+        "-a", "--a-records", metavar="DOMAIN", dest="a", help="Get A records (IPv4 addresses)"
     )
 
     parser.add_argument(
-        '-ns', '--nameservers',
-        metavar='DOMAIN',
-        help='Get nameserver records (NS) from both WHOIS and DNS'
+        "-aaaa",
+        "--aaaa-records",
+        metavar="DOMAIN",
+        dest="aaaa",
+        help="Get AAAA records (IPv6 addresses)",
     )
 
     parser.add_argument(
-        '-a', '--a-records',
-        metavar='DOMAIN',
-        dest='a',
-        help='Get A records (IPv4 addresses)'
+        "-mx",
+        "--mx-records",
+        metavar="DOMAIN",
+        dest="mx",
+        help="Get MX records (mail exchange servers)",
     )
 
     parser.add_argument(
-        '-aaaa', '--aaaa-records',
-        metavar='DOMAIN',
-        dest='aaaa',
-        help='Get AAAA records (IPv6 addresses)'
+        "-txt", "--txt-records", metavar="DOMAIN", dest="txt", help="Get TXT records"
     )
 
     parser.add_argument(
-        '-mx', '--mx-records',
-        metavar='DOMAIN',
-        dest='mx',
-        help='Get MX records (mail exchange servers)'
+        "-cname",
+        "--cname-records",
+        metavar="DOMAIN",
+        dest="cname",
+        help="Get CNAME records (aliases)",
     )
 
     parser.add_argument(
-        '-txt', '--txt-records',
-        metavar='DOMAIN',
-        dest='txt',
-        help='Get TXT records'
+        "-soa",
+        "--soa-record",
+        metavar="DOMAIN",
+        dest="soa",
+        help="Get SOA record (start of authority)",
     )
 
     parser.add_argument(
-        '-cname', '--cname-records',
-        metavar='DOMAIN',
-        dest='cname',
-        help='Get CNAME records (aliases)'
+        "-caa",
+        "--caa-records",
+        metavar="DOMAIN",
+        dest="caa",
+        help="Get CAA records (certificate authority authorization)",
     )
 
     parser.add_argument(
-        '-soa', '--soa-record',
-        metavar='DOMAIN',
-        dest='soa',
-        help='Get SOA record (start of authority)'
+        "-ptr", "--ptr-record", metavar="IP", dest="ptr", help="Get PTR record (reverse DNS lookup)"
     )
 
-    parser.add_argument(
-        '-caa', '--caa-records',
-        metavar='DOMAIN',
-        dest='caa',
-        help='Get CAA records (certificate authority authorization)'
-    )
+    parser.add_argument("-l", "--list", metavar="DOMAIN", help="Get all DNS records for a domain")
 
     parser.add_argument(
-        '-ptr', '--ptr-record',
-        metavar='IP',
-        dest='ptr',
-        help='Get PTR record (reverse DNS lookup)'
-    )
-
-    parser.add_argument(
-        '-l', '--list',
-        metavar='DOMAIN',
-        help='Get all DNS records for a domain'
-    )
-
-    parser.add_argument(
-        '-w', '--whois',
-        metavar='DOMAIN',
-        help='Get WHOIS information for a domain'
+        "-w", "--whois", metavar="DOMAIN", help="Get WHOIS information for a domain"
     )
 
     return parser
@@ -189,12 +166,12 @@ def handle_myip(formatter_class) -> int:
         print(ip_address)
         return 0
     except IPDetectionError as e:
-        logger.error(f'Failed to detect public IP: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"Failed to detect public IP: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except Exception as e:
-        logger.error(f'Unexpected error: {e}')
-        print(f'Error: {e}', file=sys.stderr)
+        logger.error(f"Unexpected error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
 
@@ -217,35 +194,35 @@ def handle_nameservers(domain: str, formatter_class, output_format: str) -> int:
         try:
             whois_ns = whois_lookup.get_nameservers(domain)
         except WHOISQueryError:
-            logger.warning('WHOIS query failed, showing DNS results only')
+            logger.warning("WHOIS query failed, showing DNS results only")
             whois_ns = []
 
-        if output_format == 'text':
+        if output_format == "text":
             output = formatter_class.format_nameservers(whois_ns, dns_ns)
-        elif output_format == 'json':
+        elif output_format == "json":
             output = formatter_class.format_nameservers(domain, whois_ns, dns_ns)
         else:
-            all_ns = {'WHOIS': whois_ns, 'DNS': dns_ns}
+            all_ns = {"WHOIS": whois_ns, "DNS": dns_ns}
             output = formatter_class.format(all_ns)
 
         print(output)
         return 0
 
     except InvalidDomainError as e:
-        logger.error(f'Invalid domain: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"Invalid domain: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except DNSNoRecordsError as e:
-        logger.info(f'No nameserver records found for {domain}')
-        print(f'No NS records found for {domain}')
+        logger.info(f"No nameserver records found for {domain}")
+        print(f"No NS records found for {domain}")
         return 0
     except DNSQueryError as e:
-        logger.error(f'DNS query failed: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"DNS query failed: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except Exception as e:
-        logger.error(f'Unexpected error: {e}')
-        print(f'Error: {e}', file=sys.stderr)
+        logger.error(f"Unexpected error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
 
@@ -266,18 +243,18 @@ def handle_dns_query(domain: str, record_type: str, formatter_class, output_form
 
         # Get records based on type
         method_map = {
-            'A': dns_resolver.get_a_records,
-            'AAAA': dns_resolver.get_aaaa_records,
-            'MX': dns_resolver.get_mx_records,
-            'TXT': dns_resolver.get_txt_records,
-            'CNAME': dns_resolver.get_cname_records,
-            'SOA': dns_resolver.get_soa_record,
-            'CAA': dns_resolver.get_caa_records,
+            "A": dns_resolver.get_a_records,
+            "AAAA": dns_resolver.get_aaaa_records,
+            "MX": dns_resolver.get_mx_records,
+            "TXT": dns_resolver.get_txt_records,
+            "CNAME": dns_resolver.get_cname_records,
+            "SOA": dns_resolver.get_soa_record,
+            "CAA": dns_resolver.get_caa_records,
         }
 
         method = method_map.get(record_type.upper())
         if not method:
-            print(f'Error: Unknown record type: {record_type}', file=sys.stderr)
+            print(f"Error: Unknown record type: {record_type}", file=sys.stderr)
             return 1
 
         records = method(domain)
@@ -285,12 +262,12 @@ def handle_dns_query(domain: str, record_type: str, formatter_class, output_form
         if not isinstance(records, list):
             records = [records] if records else []
 
-        if output_format == 'text':
-            title = f'{record_type} Record(s)'
+        if output_format == "text":
+            title = f"{record_type} Record(s)"
             output = formatter_class.format_list(title, records)
-        elif output_format == 'json':
+        elif output_format == "json":
             output = formatter_class.format_records(domain, record_type, records)
-        elif output_format == 'csv':
+        elif output_format == "csv":
             output = formatter_class.format_records(domain, record_type, records)
         else:  # yaml
             output = formatter_class.format_records(domain, record_type, records)
@@ -299,20 +276,20 @@ def handle_dns_query(domain: str, record_type: str, formatter_class, output_form
         return 0
 
     except InvalidDomainError as e:
-        logger.error(f'Invalid domain: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"Invalid domain: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except DNSNoRecordsError as e:
-        logger.info(f'No {record_type} records found for {domain}')
-        print(f'No {record_type} records found for {domain}')
+        logger.info(f"No {record_type} records found for {domain}")
+        print(f"No {record_type} records found for {domain}")
         return 0
     except DNSQueryError as e:
-        logger.error(f'DNS query failed: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"DNS query failed: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except Exception as e:
-        logger.error(f'Unexpected error: {e}')
-        print(f'Error: {e}', file=sys.stderr)
+        logger.error(f"Unexpected error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
 
@@ -332,29 +309,29 @@ def handle_ptr_query(ip_address: str, formatter_class, output_format: str) -> in
         records = dns_resolver.get_ptr_record(ip_address)
 
         # Format and print output
-        if output_format == 'text':
-            output = formatter_class.format_list(f'PTR Record(s) for {ip_address}', records)
-        elif output_format == 'json':
-            output = formatter_class.format_records(ip_address, 'PTR', records)
-        elif output_format == 'csv':
-            output = formatter_class.format_records(ip_address, 'PTR', records)
+        if output_format == "text":
+            output = formatter_class.format_list(f"PTR Record(s) for {ip_address}", records)
+        elif output_format == "json":
+            output = formatter_class.format_records(ip_address, "PTR", records)
+        elif output_format == "csv":
+            output = formatter_class.format_records(ip_address, "PTR", records)
         else:  # yaml
-            output = formatter_class.format_records(ip_address, 'PTR', records)
+            output = formatter_class.format_records(ip_address, "PTR", records)
 
         print(output)
         return 0
 
     except DNSNoRecordsError:
-        logger.info(f'No PTR records found for {ip_address}')
-        print(f'No PTR records found for {ip_address}')
+        logger.info(f"No PTR records found for {ip_address}")
+        print(f"No PTR records found for {ip_address}")
         return 0
     except DNSQueryError as e:
-        logger.error(f'PTR query failed: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"PTR query failed: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except Exception as e:
-        logger.error(f'Unexpected error: {e}')
-        print(f'Error: {e}', file=sys.stderr)
+        logger.error(f"Unexpected error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
 
@@ -387,37 +364,37 @@ def handle_all_records(domain: str, formatter_class, output_format: str) -> int:
 
         all_records = dns_resolver.get_all_records(domain)
 
-        if output_format == 'text':
+        if output_format == "text":
             print(formatter_class.format_nameservers(whois_ns, dns_ns))
             print(formatter_class.format_all_records(all_records))
-        elif output_format == 'json':
+        elif output_format == "json":
             combined = {
-                'domain': domain,
-                'nameservers': {'whois': whois_ns, 'dns': dns_ns},
-                'records': all_records
+                "domain": domain,
+                "nameservers": {"whois": whois_ns, "dns": dns_ns},
+                "records": all_records,
             }
             print(formatter_class.format(combined))
-        elif output_format == 'csv':
-            all_records['WHOIS_NS'] = whois_ns
-            all_records['DNS_NS'] = dns_ns
+        elif output_format == "csv":
+            all_records["WHOIS_NS"] = whois_ns
+            all_records["DNS_NS"] = dns_ns
             print(formatter_class.format_all_records(domain, all_records))
         else:  # yaml
             combined = {
-                'domain': domain,
-                'nameservers': {'whois': whois_ns, 'dns': dns_ns},
-                'records': all_records
+                "domain": domain,
+                "nameservers": {"whois": whois_ns, "dns": dns_ns},
+                "records": all_records,
             }
             print(formatter_class.format(combined))
 
         return 0
 
     except InvalidDomainError as e:
-        logger.error(f'Invalid domain: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"Invalid domain: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except Exception as e:
-        logger.error(f'Unexpected error: {e}')
-        print(f'Error: {e}', file=sys.stderr)
+        logger.error(f"Unexpected error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
 
@@ -437,7 +414,7 @@ def handle_whois(domain: str, formatter_class, output_format: str) -> int:
         whois_data = whois_lookup.query(domain)
 
         # Format and print output
-        if output_format == 'text':
+        if output_format == "text":
             print(f"\nWHOIS Information for {domain}")
             print("=" * (24 + len(domain)))
             for key, value in whois_data.items():
@@ -449,22 +426,22 @@ def handle_whois(domain: str, formatter_class, output_format: str) -> int:
                     print(f"  {key}: {value}")
             print()
         else:
-            whois_data['domain'] = domain
+            whois_data["domain"] = domain
             print(formatter_class.format(whois_data))
 
         return 0
 
     except InvalidDomainError as e:
-        logger.error(f'Invalid domain: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"Invalid domain: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except WHOISQueryError as e:
-        logger.error(f'WHOIS query failed: {e.message}')
-        print(f'Error: {e.message}', file=sys.stderr)
+        logger.error(f"WHOIS query failed: {e.message}")
+        print(f"Error: {e.message}", file=sys.stderr)
         return 1
     except Exception as e:
-        logger.error(f'Unexpected error: {e}')
-        print(f'Error: {e}', file=sys.stderr)
+        logger.error(f"Unexpected error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
 
@@ -490,7 +467,7 @@ def main() -> int:
     try:
         formatter_class = get_formatter(args.format)
     except ValueError as e:
-        print(f'Error: {e}', file=sys.stderr)
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     # Route to appropriate handler
@@ -500,19 +477,19 @@ def main() -> int:
         elif args.nameservers:
             return handle_nameservers(args.nameservers, formatter_class, args.format)
         elif args.a:
-            return handle_dns_query(args.a, 'A', formatter_class, args.format)
+            return handle_dns_query(args.a, "A", formatter_class, args.format)
         elif args.aaaa:
-            return handle_dns_query(args.aaaa, 'AAAA', formatter_class, args.format)
+            return handle_dns_query(args.aaaa, "AAAA", formatter_class, args.format)
         elif args.mx:
-            return handle_dns_query(args.mx, 'MX', formatter_class, args.format)
+            return handle_dns_query(args.mx, "MX", formatter_class, args.format)
         elif args.txt:
-            return handle_dns_query(args.txt, 'TXT', formatter_class, args.format)
+            return handle_dns_query(args.txt, "TXT", formatter_class, args.format)
         elif args.cname:
-            return handle_dns_query(args.cname, 'CNAME', formatter_class, args.format)
+            return handle_dns_query(args.cname, "CNAME", formatter_class, args.format)
         elif args.soa:
-            return handle_dns_query(args.soa, 'SOA', formatter_class, args.format)
+            return handle_dns_query(args.soa, "SOA", formatter_class, args.format)
         elif args.caa:
-            return handle_dns_query(args.caa, 'CAA', formatter_class, args.format)
+            return handle_dns_query(args.caa, "CAA", formatter_class, args.format)
         elif args.ptr:
             return handle_ptr_query(args.ptr, formatter_class, args.format)
         elif args.list:
@@ -524,13 +501,13 @@ def main() -> int:
             return 1
 
     except KeyboardInterrupt:
-        print('\n\nInterrupted by user', file=sys.stderr)
+        print("\n\nInterrupted by user", file=sys.stderr)
         return 130
     except Exception as e:
-        logger.exception('Unhandled exception in main')
-        print(f'Fatal error: {e}', file=sys.stderr)
+        logger.exception("Unhandled exception in main")
+        print(f"Fatal error: {e}", file=sys.stderr)
         return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
