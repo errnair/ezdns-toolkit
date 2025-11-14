@@ -2,7 +2,7 @@
 
 DNS lookup tool for querying records, WHOIS information, and network diagnostics.
 
-[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE.md)
 
 ## Features
@@ -33,7 +33,7 @@ Development setup:
 pip install -e ".[dev]"
 ```
 
-Requires Python 3.8 or higher.
+Requires Python 3.9 or higher.
 
 ## Quick Start
 

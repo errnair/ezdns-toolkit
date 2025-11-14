@@ -7,7 +7,7 @@ name = "ezdns-toolkit"
 version = "2.0.0"
 description = "DNS lookup tool and domain information analyzer for developers, sysadmins, and security professionals"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = {text = "GPL-3.0-or-later"}
 authors = [
     {name = "Rahul Nair", email = "rn4ir@users.noreply.github.com"}
@@ -44,7 +44,6 @@ classifiers = [
     "Topic :: Security",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -106,7 +105,7 @@ ezdns = ["py.typed"]
 
 [tool.black]
 line-length = 100
-target-version = ["py38", "py39", "py310", "py311", "py312"]
+target-version = ["py39", "py310", "py311", "py312"]
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -146,7 +145,7 @@ addopts = [
 ]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
