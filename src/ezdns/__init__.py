@@ -1,4 +1,4 @@
-"""ezdns - Professional DNS lookup and domain information toolkit.
+"""ezdns - DNS lookup and domain information toolkit.
 
 A modern, secure DNS investigation tool for network administrators,
 developers, and security professionals.

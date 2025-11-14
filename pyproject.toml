@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ezdns-toolkit"
 version = "2.0.0"
-description = "Professional DNS lookup tool and domain information analyzer for developers, sysadmins, and security professionals"
+description = "DNS lookup tool and domain information analyzer for developers, sysadmins, and security professionals"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "GPL-3.0-or-later"}

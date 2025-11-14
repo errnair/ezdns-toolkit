@@ -62,7 +62,7 @@ def create_parser() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(
         prog='ezdns',
-        description='Professional DNS lookup and domain information tool',
+        description='DNS lookup and domain information tool',
         epilog='For more information, visit: https://github.com/errnair/ezdns-toolkit'
     )
 

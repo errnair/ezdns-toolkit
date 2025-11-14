@@ -179,7 +179,7 @@ class YAMLFormatter:
         return YAMLFormatter.format(data)
 
 
-def get_formatter(format_type: str):
+def get_formatter(format_type: str) -> BaseFormatter:
     """Get formatter for specified format."""
     formatters = {
         'text': TextFormatter,
