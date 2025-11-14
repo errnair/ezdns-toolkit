@@ -7,11 +7,7 @@ import dns.exception
 import dns.resolver
 
 from ..config.settings import settings
-from ..utils.exceptions import (
-    DNSNoRecordsError,
-    DNSQueryError,
-    DNSTimeoutError,
-)
+from ..utils.exceptions import DNSNoRecordsError, DNSQueryError, DNSTimeoutError
 from ..utils.validators import validate_domain
 
 logger = logging.getLogger(__name__)

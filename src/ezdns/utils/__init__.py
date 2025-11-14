@@ -11,13 +11,7 @@ from .exceptions import (
     NetworkError,
     WHOISQueryError,
 )
-from .formatters import (
-    CSVFormatter,
-    JSONFormatter,
-    TextFormatter,
-    YAMLFormatter,
-    get_formatter,
-)
+from .formatters import CSVFormatter, JSONFormatter, TextFormatter, YAMLFormatter, get_formatter
 from .validators import (
     is_ipv4,
     is_ipv6,
